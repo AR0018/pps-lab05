@@ -6,6 +6,12 @@ import scala.math.sqrt // Needed for magnitude calculation
 // Structure: x-component and y-component
 trait Vector2D:
   def x: Double
+  //def x_=(state:Double):Unit
+  // If we wanted to make the "x" parameter mutable, we would have to insert the previous declaration in the trait.
+  // This declaration corresponds to the relative getter method.
+  // If we declare this method in the trait, we can then implement both the getter and the setter of x
+  // by specifying: "override var x" as a class parameter of our implementation.
+
   def y: Double
 
   // Vector addition: (x1, y1) + (x2, y2) = (x1+x2, y1+y2)
@@ -32,7 +38,12 @@ object Vector2D:
   val i: Vector2D = apply(1.0, 0.0) // Unit vector along x-axis
   val j: Vector2D = apply(0.0, 1.0) // Unit vector along y-axis
 
-  private case class Vector2DImpl(override val x:Double, override val y:Double) extends Vector2D:
+  //PREVIOUS: private case class Vector2DImpl(override val x:Double, override val y:Double) extends Vector2D:
+  // If we use a case class, it's not recommended to include "override val" in the class parameters declaration
+  // (like in the "PREVIOUS" comment above), since a case class has immutable parameters by definition.
+  // So, we can simply just declare the parameters without specifying anything. This makes the code more readable
+  // in case our class has a lot of input parameters.
+  private case class Vector2DImpl(x:Double, y:Double) extends Vector2D:
     override def +(other: Vector2D): Vector2D = Vector2D(x + other.x, y + other.y)
     override def -(other: Vector2D): Vector2D = this + Vector2D(-other.x, -other.y)
     override def *(scalar: Double): Vector2D = Vector2D(scalar * x, scalar * y)
