@@ -113,6 +113,8 @@ object OnlineCoursePlatform:
     override def isStudentEnrolled(studentId: String, courseId: String): Boolean =
       enrollments.contains(Enrollment(studentId, courseId))
 
+//  object sameCategory:  TODO: implement extractor
+//    def unapply(courses: Sequence[Course]): Option[String] = ???
 /**
  * Represents an online learning platform that offers courses and manages student enrollments.
  * Hints:
@@ -169,3 +171,7 @@ object OnlineCoursePlatform:
   println(s"Is PYTHON01 available? ${platform.isCourseAvailable(pythonCourse.courseId)}") // false
   println(s"Programming courses: ${platform.findCoursesByCategory("Programming")}") // Sequence(scalaCourse)
 
+//  val courses = Sequence(scalaCourse, pythonCourse) TODO: test extractor
+//  courses match
+//  case sameCategory(cat) => println( s"$courses have same category $cat")
+//  case _ => println(s"$courses have different categories")
