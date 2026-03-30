@@ -18,7 +18,7 @@ object Course:
   private case class CourseImpl(courseId: String, title: String, instructor: String, category: String) extends Course
 
 object sameCategory:
-  def unapply(courses: Sequence[Course]): Option[String] = ???
+  def unapply(courses: Sequence[Course]): Option[String] = ??? //courses.map(_.category).
 
 /**
  * Manages courses and student enrollments on an online learning platform.
@@ -173,7 +173,13 @@ object OnlineCoursePlatform:
   println(s"Is PYTHON01 available? ${platform.isCourseAvailable(pythonCourse.courseId)}") // false
   println(s"Programming courses: ${platform.findCoursesByCategory("Programming")}") // Sequence(scalaCourse)
 
-  val courses = Sequence(scalaCourse, pythonCourse) //TODO: test extractor
-  courses match
-  case sameCategory(cat) => println( s"$courses have same category $cat")
-  case _ => println(s"$courses have different categories")
+  // Tests same category extractor for sequences of courses
+  val testSameCategory: Sequence[Course] => Unit = courses => courses match
+    case sameCategory(cat) => println( s"$courses have same category $cat")
+    case _ => println(s"$courses have different categories")
+
+  val coursesSameCategory = Sequence(scalaCourse, pythonCourse)
+  val coursesDifferentCategories = Sequence(scalaCourse, designCourse)
+
+  testSameCategory(coursesSameCategory)
+  testSameCategory(coursesDifferentCategories)
