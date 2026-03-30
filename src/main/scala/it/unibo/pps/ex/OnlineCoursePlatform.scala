@@ -16,6 +16,10 @@ object Course:
     CourseImpl(courseId, title, instructor, category)
 
   private case class CourseImpl(courseId: String, title: String, instructor: String, category: String) extends Course
+
+object sameCategory:
+  def unapply(courses: Sequence[Course]): Option[String] = ???
+
 /**
  * Manages courses and student enrollments on an online learning platform.
  */
@@ -113,8 +117,6 @@ object OnlineCoursePlatform:
     override def isStudentEnrolled(studentId: String, courseId: String): Boolean =
       enrollments.contains(Enrollment(studentId, courseId))
 
-//  object sameCategory:  TODO: implement extractor
-//    def unapply(courses: Sequence[Course]): Option[String] = ???
 /**
  * Represents an online learning platform that offers courses and manages student enrollments.
  * Hints:
@@ -171,7 +173,7 @@ object OnlineCoursePlatform:
   println(s"Is PYTHON01 available? ${platform.isCourseAvailable(pythonCourse.courseId)}") // false
   println(s"Programming courses: ${platform.findCoursesByCategory("Programming")}") // Sequence(scalaCourse)
 
-//  val courses = Sequence(scalaCourse, pythonCourse) TODO: test extractor
-//  courses match
-//  case sameCategory(cat) => println( s"$courses have same category $cat")
-//  case _ => println(s"$courses have different categories")
+  val courses = Sequence(scalaCourse, pythonCourse) //TODO: test extractor
+  courses match
+  case sameCategory(cat) => println( s"$courses have same category $cat")
+  case _ => println(s"$courses have different categories")
