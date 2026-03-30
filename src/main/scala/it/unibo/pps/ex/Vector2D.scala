@@ -25,13 +25,19 @@ trait Vector2D:
 
 object Vector2D:
   // Factory method to create Vector2D instances
-  def apply(x: Double, y: Double): Vector2D = ???
+  def apply(x: Double, y: Double): Vector2D = Vector2DImpl(x, y)
 
   // Common vectors (optional but nice)
   val zero: Vector2D = apply(0.0, 0.0)
   val i: Vector2D = apply(1.0, 0.0) // Unit vector along x-axis
   val j: Vector2D = apply(0.0, 1.0) // Unit vector along y-axis
 
+  private case class Vector2DImpl(override val x:Double, override val y:Double) extends Vector2D:
+    override def +(other: Vector2D): Vector2D = Vector2D(x + other.x, y + other.y)
+    override def -(other: Vector2D): Vector2D = this + Vector2D(-other.x, -other.y)
+    override def *(scalar: Double): Vector2D = Vector2D(scalar * x, scalar * y)
+    override def dot(other: Vector2D): Double = x * other.x + y * other.y
+    override def magnitude: Double = sqrt(this.dot(this))
 
 /** Hints:
  *   - Implement Vector2D with a Vector2DImpl class.
@@ -77,3 +83,9 @@ object Vector2D:
   // sum * 3.0 = (6.0, 18.0)
   // (6.0, 18.0) - (1.0, 1.0) = (5.0, 17.0)
   println(s"Multiple Ops: $multipleOps, x: ${multipleOps.x}, y: ${multipleOps.y}")
+
+  // These two checks break if we remove "case" from Vector2DImpl's definition
+  // Expected: true
+  println(s"Test Equals: ${v1 == Vector2D(v1.x, v1.y)}")
+  // Expected: Vector2DImpl(3.0,4.0)
+  println("Test toString: " + v1.toString)
