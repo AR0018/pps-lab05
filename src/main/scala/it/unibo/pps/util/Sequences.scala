@@ -3,6 +3,8 @@ package it.unibo.pps.util
 import it.unibo.pps.util.Optionals.Optional.*
 import it.unibo.pps.util.Optionals.Optional
 
+import scala.annotation.tailrec
+
 object Sequences: // Essentially, generic linkedlists
   
   enum Sequence[E]:
@@ -24,6 +26,13 @@ object Sequences: // Essentially, generic linkedlists
     def empty[A]: Sequence[A] = Nil()
 
     extension [A](sequence: Sequence[A])
+      def length: Int =
+        @tailrec
+        def _length(s: Sequence[A], length: Int): Int = s match
+          case Cons(h, t) => _length(t, length + 1)
+          case _ => length
+        _length(sequence, 0)
+
       def head: Optional[A] = sequence match
         case Cons(h, _) => Just(h)
         case _ => Empty()
@@ -52,6 +61,14 @@ object Sequences: // Essentially, generic linkedlists
       def reverse(): Sequence[A] = sequence match
         case Cons(h, t) => t.reverse().concat(Cons(h, Nil()))
         case _ => Nil()
+
+      def distinct(): Sequence[A] =
+        @tailrec
+        def _distinct(s: Sequence[A], distinctVals: Sequence[A]): Sequence[A] = s match
+          case Cons(h, t) if distinctVals.contains(h) => _distinct(t, distinctVals)
+          case Cons(h, t) => _distinct(s, distinctVals.concat(Cons(h, Nil())))
+          case _ => distinctVals
+        _distinct(sequence, Nil())
 @main def trySequences =
   import Sequences.* 
   val sequence = Sequence(1, 2, 3)

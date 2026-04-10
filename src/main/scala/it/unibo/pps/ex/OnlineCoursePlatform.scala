@@ -18,7 +18,11 @@ object Course:
   private case class CourseImpl(courseId: String, title: String, instructor: String, category: String) extends Course
 
 object sameCategory:
-  def unapply(courses: Sequence[Course]): Option[String] = ??? //courses.map(_.category).
+  def unapply(courses: Sequence[Course]): Option[String] =
+    val categories = courses.map(_.category).distinct()
+    categories.head match
+    case Optional.Just(el) => Some(el) filter (el => categories.length == 1)
+    case _ => None
 
 /**
  * Manages courses and student enrollments on an online learning platform.
